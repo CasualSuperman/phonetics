@@ -4,17 +4,17 @@
 
 package phonetics
 
-import (
-	"strings"
-)
+type Soundex [4]byte
+
+var defaultSoundex = Soundex{'0', '0', '0', '0'}
 
 // EncodeSoundex is a function to encode string with Soundex algorithm.
 // Soundex is a phonetic algorithm for indexing names by sound, as pronounced in English.
-func EncodeSoundex(word string) string {
+func EncodeSoundex(word string) Soundex {
+	soundex := defaultSoundex
 	if word == "" {
-		return "0000"
+		return soundex
 	}
-	soundex := [4]byte{'0', '0', '0', '0'}
 	input := []byte(word)
 	soundex[0] = input[0] & 0xDF
 
@@ -39,7 +39,7 @@ func EncodeSoundex(word string) string {
 		}
 
 		if soundex[lastFilled] != code {
-			soundex[lastFilled + 1] = code
+			soundex[lastFilled+1] = code
 			lastFilled = lastFilled + 1
 
 			if lastFilled == 3 {
@@ -47,12 +47,15 @@ func EncodeSoundex(word string) string {
 			}
 		}
 	}
-	return string(soundex[:])
+	return soundex
 }
 
 // DifferenceSoundex is a function to calculate difference between two strings with Soundex algorithm.
 // Function returns a ranking on how similar two words are in percents.
 func DifferenceSoundex(word1, word2 string) int {
+	if word1 == word2 {
+		return 100
+	}
 	soundex1 := EncodeSoundex(word1)
 	soundex2 := EncodeSoundex(word2)
 	sum := differenceSoundex(soundex1, soundex2) + differenceSoundex(soundex2, soundex1)
@@ -62,27 +65,24 @@ func DifferenceSoundex(word1, word2 string) int {
 	return sum / 2
 }
 
-func differenceSoundex(soundex1, soundex2 string) int {
-	if soundex1 == soundex2 {
-		return 100
-	}
+func differenceSoundex(sx1, sx2 Soundex) int {
 	result := 0
-	if strings.Index(soundex2, soundex1[1:]) > -1 {
+	if sx1[1] == sx2[1] && sx1[2] == sx2[2] && sx1[3] == sx2[3] {
 		result = 3
-	} else if strings.Index(soundex2, soundex1[2:]) > -1 || strings.Index(soundex2, soundex1[1:3]) > -1 {
+	} else if (sx2[1] == sx1[2] && sx2[2] == sx1[3]) || (sx2[1] == sx1[1] && sx2[2] == sx1[2]) {
 		result = 2
 	} else {
-		if strings.Index(soundex2, soundex1[1:2]) > -1 {
-			result = result + 1
+		if sx2[1] == sx1[1] || sx2[2] == sx1[1] || sx2[3] == sx1[1] {
+			result++
 		}
-		if strings.Index(soundex2, soundex1[2:3]) > -1 {
-			result = result + 1
+		if sx2[1] == sx1[2] || sx2[2] == sx1[2] || sx2[3] == sx1[2] {
+			result++
 		}
-		if strings.Index(soundex2, soundex1[3:4]) > -1 {
-			result = result + 1
+		if sx2[1] == sx1[3] || sx2[2] == sx1[3] || sx2[3] == sx1[3] {
+			result++
 		}
 	}
-	if soundex1[0:1] == soundex2[0:1] {
+	if sx1[0] == sx2[0] {
 		result = result + 1
 	}
 	return result * 25

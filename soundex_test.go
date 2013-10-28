@@ -7,17 +7,17 @@ package phonetics
 import "testing"
 
 func TestSoundexEmptyString(t *testing.T) {
-	if EncodeSoundex("") != "0000" {
+	if EncodeSoundex("") != [4]byte{'0', '0', '0', '0'} {
 		t.Errorf("Encode with empty string should return 0000")
 	}
 }
 
 func TestSoundexEncode(t *testing.T) {
-	assertSoundexEquals(t, "Donald", "D543")
-	assertSoundexEquals(t, "Zach", "Z200")
-	assertSoundexEquals(t, "Campbel", "C514")
-	assertSoundexEquals(t, "Cammmppppbbbeeelll", "C514")
-	assertSoundexEquals(t, "David", "D130")
+	assertSoundexEquals(t, "Donald", Soundex{'D', '5', '4', '3'})
+	assertSoundexEquals(t, "Zach", Soundex{'Z', '2', '0', '0'})
+	assertSoundexEquals(t, "Campbel", Soundex{'C', '5', '1', '4'})
+	assertSoundexEquals(t, "Cammmppppbbbeeelll", Soundex{'C', '5', '1', '4'})
+	assertSoundexEquals(t, "David", Soundex{'D', '1', '3', '0'})
 }
 
 func TestSoundexDifference(t *testing.T) {
@@ -34,7 +34,7 @@ func assertSoundexDifference(t *testing.T, word1 string, word2 string, rank int)
 	}
 }
 
-func assertSoundexEquals(t *testing.T, source string, target string) {
+func assertSoundexEquals(t *testing.T, source string, target Soundex) {
 	if EncodeSoundex(source) != target {
 		t.Errorf("source doesn't match target. Input: %s, Result: %s, Target: %s", source, EncodeSoundex(source), target)
 	}
