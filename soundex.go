@@ -14,34 +14,40 @@ func EncodeSoundex(word string) string {
 	if word == "" {
 		return "0000"
 	}
-	input := strings.ToLower(word)
-	result := strings.ToUpper(input[0:1])
-	code := ""
-	lastCode := ""
-	for _, rune := range input[1:] {
-		switch rune {
-		case 'b', 'f', 'p', 'v':
-			code = "1"
-		case 'c', 'g', 'j', 'k', 'q', 's', 'x', 'z':
-			code = "2"
-		case 'd', 't':
-			code = "3"
-		case 'l':
-			code = "4"
-		case 'm', 'n':
-			code = "5"
-		case 'r':
-			code = "6"
+	soundex := [4]byte{'0', '0', '0', '0'}
+	input := []byte(word)
+	soundex[0] = input[0] & 0xDF
+
+	lastFilled := 0
+
+	for _, b := range input[1:] {
+		var code byte = soundex[lastFilled]
+
+		switch b {
+		case 'b', 'f', 'p', 'v', 'B', 'F', 'P', 'V':
+			code = '1'
+		case 'c', 'g', 'j', 'k', 'q', 's', 'x', 'z', 'C', 'G', 'J', 'K', 'Q', 'S', 'X', 'Z':
+			code = '2'
+		case 'd', 't', 'D', 'T':
+			code = '3'
+		case 'l', 'L':
+			code = '4'
+		case 'm', 'n', 'M', 'N':
+			code = '5'
+		case 'r', 'R':
+			code = '6'
 		}
-		if lastCode != code {
-			lastCode = code
-			result = result + lastCode
-			if len(result) == 4 {
+
+		if soundex[lastFilled] != code {
+			soundex[lastFilled + 1] = code
+			lastFilled = lastFilled + 1
+
+			if lastFilled == 3 {
 				break
 			}
 		}
 	}
-	return result + strings.Repeat("0", 4-len(result))
+	return string(soundex[:])
 }
 
 // DifferenceSoundex is a function to calculate difference between two strings with Soundex algorithm.
