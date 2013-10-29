@@ -4,6 +4,8 @@
 
 package phonetics
 
+import "unsafe"
+
 type Soundex [4]byte
 
 var defaultSoundex = Soundex{'0', '0', '0', '0'}
@@ -15,7 +17,7 @@ func EncodeSoundex(word string) Soundex {
 	if word == "" {
 		return soundex
 	}
-	input := []byte(word)
+	input := *((*[]byte)(unsafe.Pointer(&word)))
 	soundex[0] = input[0] & 0xDF
 
 	lastFilled := 0
@@ -84,7 +86,7 @@ func differenceSoundex(sx1, sx2 Soundex) int {
 		}
 	}
 	if sx1[0] == sx2[0] {
-		result = result + 1
+		result++
 	}
 	return result * 25
 }
