@@ -25,27 +25,27 @@ func EncodeSoundex(word string) Soundex {
 	for _, b := range input[1:] {
 		var code byte = soundex[lastFilled]
 
-		switch b {
-		case 'b', 'f', 'p', 'v', 'B', 'F', 'P', 'V':
+		switch b&0xDF {
+		case 'B', 'F', 'P', 'V':
 			code = '1'
-		case 'c', 'g', 'j', 'k', 'q', 's', 'x', 'z', 'C', 'G', 'J', 'K', 'Q', 'S', 'X', 'Z':
+		case 'C', 'G', 'J', 'K', 'Q', 'S', 'X', 'Z':
 			code = '2'
-		case 'd', 't', 'D', 'T':
+		case 'D', 'T':
 			code = '3'
-		case 'l', 'L':
+		case 'L':
 			code = '4'
-		case 'm', 'n', 'M', 'N':
+		case 'M', 'N':
 			code = '5'
-		case 'r', 'R':
+		case 'R':
 			code = '6'
 		}
 
 		if soundex[lastFilled] != code {
-			soundex[lastFilled+1] = code
-			lastFilled = lastFilled + 1
+			lastFilled++
+			soundex[lastFilled] = code
 
 			if lastFilled == 3 {
-				break
+				return soundex
 			}
 		}
 	}
