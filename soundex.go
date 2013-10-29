@@ -69,7 +69,8 @@ func differenceSoundex(sx1, sx2 Soundex) int {
 	result := 0
 	if sx1[1] == sx2[1] && sx1[2] == sx2[2] && sx1[3] == sx2[3] {
 		result = 3
-	} else if (sx2[1] == sx1[2] && sx2[2] == sx1[3]) || (sx2[1] == sx1[1] && sx2[2] == sx1[2]) {
+	} else if (sx2[1] == sx1[2] && sx2[2] == sx1[3]) || (sx2[1] == sx1[1] && sx2[2] == sx1[2]) ||
+		(sx2[2] == sx1[1] && sx2[3] == sx1[2]) || (sx2[2] == sx1[2] && sx2[3] == sx1[3]) {
 		result = 2
 	} else {
 		if sx2[1] == sx1[1] || sx2[2] == sx1[1] || sx2[3] == sx1[1] {
