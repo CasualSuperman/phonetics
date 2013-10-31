@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package phonetics
+package metaphone
 
 import (
 	"strings"
@@ -11,7 +11,7 @@ import (
 // EncodeMetaphone is a function to encode string with Metaphone algorithm.
 // Metaphone is a phonetic algorithm, published by Lawrence Philips in 1990, for indexing words by their English pronunciation.
 // With Michael Kuhn modification (mkuhn@rhlab.UUCP)
-func EncodeMetaphone(word string) string {
+func Encode(word string) string {
 	if word == "" {
 		return ""
 	}

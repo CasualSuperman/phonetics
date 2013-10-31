@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package phonetics
+package soundex
 
 import "testing"
 
 func TestSoundexEmptyString(t *testing.T) {
-	if EncodeSoundex("") != [4]byte{'0', '0', '0', '0'} {
+	if Encode("") != [4]byte{'0', '0', '0', '0'} {
 		t.Errorf("Encode with empty string should return 0000")
 	}
 }
@@ -29,13 +29,13 @@ func TestSoundexDifference(t *testing.T) {
 }
 
 func assertSoundexDifference(t *testing.T, word1 string, word2 string, rank int) {
-	if DifferenceSoundex(word1, word2) != rank {
-		t.Errorf("difference doesn't match target. Input: (%s, %s), Result: %d, Target: %d", word1, word2, DifferenceSoundex(word1, word2), rank)
+	if Difference(word1, word2) != rank {
+		t.Errorf("difference doesn't match target. Input: (%s, %s), Result: %d, Target: %d", word1, word2, Difference(word1, word2), rank)
 	}
 }
 
 func assertSoundexEquals(t *testing.T, source string, target Soundex) {
-	if EncodeSoundex(source) != target {
-		t.Errorf("source doesn't match target. Input: %s, Result: %s, Target: %s", source, EncodeSoundex(source), target)
+	if Encode(source) != target {
+		t.Errorf("source doesn't match target. Input: %s, Result: %s, Target: %s", source, Encode(source), target)
 	}
 }

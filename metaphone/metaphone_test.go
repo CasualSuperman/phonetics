@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package phonetics
+package metaphone
 
 import "testing"
 
 func TestMetaphoneEmptyString(t *testing.T) {
-	if EncodeMetaphone("") != "" {
+	if Encode("") != "" {
 		t.Errorf("Encode with empty string should return empty string")
 	}
 }
@@ -25,7 +25,7 @@ func TestMetaphoneEncode(t *testing.T) {
 }
 
 func assertMetaphoneEquals(t *testing.T, source string, target string) {
-	if EncodeMetaphone(source) != target {
-		t.Errorf("source doesn't match target. Input: %s, Result: %s, Target: %s", source, EncodeMetaphone(source), target)
+	if Encode(source) != target {
+		t.Errorf("source doesn't match target. Input: %s, Result: %s, Target: %s", source, Encode(source), target)
 	}
 }

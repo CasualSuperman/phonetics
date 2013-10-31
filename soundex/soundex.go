@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package phonetics
+package soundex
 
 import "unsafe"
 
@@ -12,7 +12,7 @@ var defaultSoundex = Soundex{'0', '0', '0', '0'}
 
 // EncodeSoundex is a function to encode string with Soundex algorithm.
 // Soundex is a phonetic algorithm for indexing names by sound, as pronounced in English.
-func EncodeSoundex(word string) Soundex {
+func Encode(word string) Soundex {
 	soundex := defaultSoundex
 	if word == "" {
 		return soundex
@@ -54,12 +54,12 @@ func EncodeSoundex(word string) Soundex {
 
 // DifferenceSoundex is a function to calculate difference between two strings with Soundex algorithm.
 // Function returns a ranking on how similar two words are in percents.
-func DifferenceSoundex(word1, word2 string) int {
+func Difference(word1, word2 string) int {
 	if word1 == word2 {
 		return 100
 	}
-	soundex1 := EncodeSoundex(word1)
-	soundex2 := EncodeSoundex(word2)
+	soundex1 := Encode(word1)
+	soundex2 := Encode(word2)
 	sum := differenceSoundex(soundex1, soundex2) + differenceSoundex(soundex2, soundex1)
 	if sum == 0 {
 		return 0
