@@ -103,6 +103,8 @@ func EncodeMetaphone(word string) string {
 			{
 				if safeSubString(word, i+1, 1) == "H" {
 					result = result + "F"
+				} else if safeSubString(word, i, 3) == "PSY" || safeSubString(word, i, 3) == "PSI" {
+					// Wait for the s
 				} else {
 					result = result + "P"
 				}
