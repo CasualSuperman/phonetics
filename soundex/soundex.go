@@ -25,7 +25,7 @@ func Encode(word string) Soundex {
 	for _, b := range input[1:] {
 		var code byte = soundex[lastFilled]
 
-		switch b&0xDF {
+		switch b & 0xDF {
 		case 'B', 'F', 'P', 'V':
 			code = '1'
 		case 'C', 'G', 'J', 'K', 'Q', 'S', 'X', 'Z':
